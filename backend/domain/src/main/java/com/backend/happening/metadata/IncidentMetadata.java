@@ -1,11 +1,19 @@
 package com.backend.happening.metadata;
 
+import com.backend.happening.Happening;
+import com.backend.happening.Incident;
 import com.backend.shared.Location;
 import lombok.Builder;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
+/**
+ * Metadata specific to an {@link Incident}, including author, location,
+ * creation timestamp, and expiration deadline.
+ *
+ * Implements the {@link Metadata} mixin interface used across different {@link Happening} types.
+ */
 @Builder(toBuilder = true)
 public record IncidentMetadata(
         @NonNull String authorUsername,
@@ -13,6 +21,16 @@ public record IncidentMetadata(
         LocalDateTime createdAt,
         LocalDateTime expirationTime) implements Metadata {
 
+    /**
+     * Constructs an {@code IncidentMetadata} instance with defaulting and validation.
+     * - Sets {@code createdAt} to {@code now()} if null.
+     * - Sets {@code expirationTime} to 30 minutes after {@code createdAt} if null.
+     * - Validates that {@code expirationTime} is not before {@code createdAt} or the current time.
+     *
+     * @throws IllegalArgumentException if:
+     *   {@code expirationTime} is before {@code createdAt}
+     *   {@code expirationTime} is in the past
+     */
     public IncidentMetadata {
         if (createdAt == null)
             createdAt = LocalDateTime.now();

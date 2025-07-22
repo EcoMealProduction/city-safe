@@ -2,6 +2,10 @@ package com.backend.shared;
 
 import lombok.Builder;
 
+/**
+ * Represents basic sentiment engagement metrics for a {@link Happening},
+ * including the number of likes and dislikes submitted by users.
+ */
 @Builder(toBuilder = true)
 public record SentimentEngagement(int likes, int dislikes) {
 

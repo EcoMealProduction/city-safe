@@ -1,10 +1,8 @@
 package com.backend.happening;
 
 import com.backend.happening.metadata.IncidentMetadata;
-import com.backend.happening.metadata.Metadata;
 import com.backend.shared.SentimentEngagement;
 import com.backend.user.Comment;
-import lombok.Builder;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
@@ -40,6 +38,11 @@ public record Incident(
         comments = comments == null ? List.of() : new ArrayList<>(comments);
     }
 
+    /**
+     * Creates a builder pre-filled with the current incident's field values.
+     *
+     * @return a {@link Builder} instance for creating modified copies.
+     */
     @Override
     public Builder toBuilder() {
         return new Builder()
@@ -51,48 +54,99 @@ public record Incident(
                 .incidentEngagementStats(incidentEngagementStats);
     }
 
+    /**
+     * Builder class for constructing {@link Incident} instances.
+     * Inherits common builder logic from {@link Happening.Builder}.
+     */
     public static class Builder extends Happening.Builder<Builder> {
         protected IncidentEngagementStats incidentEngagementStats;
 
+        /**
+         * Returns the current builder instance.
+         * Required for fluent API and proper type inference.
+         *
+         * @return this builder.
+         */
         @Override
         Builder self() {
             return (Builder) this;
         }
 
+        /**
+         * Sets the incident title.
+         *
+         * @param aTitle the title to set.
+         * @return this builder.
+         */
         @Override
         public Builder title(String aTitle) {
             this.title = aTitle;
             return self();
         }
 
+        /**
+         * Sets the incident description.
+         *
+         * @param aDescription the description to set.
+         * @return this builder.
+         */
         @Override
         public Builder description(String aDescription) {
             this.description = aDescription;
             return self();
         }
 
+        /**
+         * Sets the incident comments.
+         *
+         * @param aComments the list of comments to set.
+         * @return this builder.
+         */
         @Override
         public Builder comments(List<Comment> aComments) {
             this.comments = aComments;
             return self();
         }
 
-        public Builder metadata(IncidentMetadata aIncidentMetadata) {
-            this.metadata = aIncidentMetadata;
-            return self();
-        }
-
+        /**
+         * Sets sentiment engagement information.
+         *
+         * @param aSentimentEngagement the sentiment engagement to set.
+         * @return this builder.
+         */
         @Override
         public Builder sentimentEngagement(SentimentEngagement aSentimentEngagement) {
             this.sentimentEngagement = aSentimentEngagement;
             return self();
         }
 
+        /**
+         * Sets the incident-specific metadata.
+         *
+         * @param aIncidentMetadata the metadata to set.
+         * @return this builder.
+         */
+        public Builder metadata(IncidentMetadata aIncidentMetadata) {
+            this.metadata = aIncidentMetadata;
+            return self();
+        }
+
+        /**
+         * Sets the engagement statistics specific to the incident (e.g., confirms/denies).
+         *
+         * @param aIncidentEngagementStats the stats object to set.
+         * @return this builder.
+         */
         public Builder incidentEngagementStats(IncidentEngagementStats aIncidentEngagementStats) {
             this.incidentEngagementStats = aIncidentEngagementStats;
             return self();
         }
 
+        /**
+         * Constructs a new {@link Incident} using the current builder state.
+         *
+         * @return a new {@code Incident} instance.
+         */
         @Override
         public Incident build() {
             return new Incident(
@@ -179,5 +233,4 @@ public record Incident(
                 .comments(commentsCopy)
                 .build();
     }
-
 }
